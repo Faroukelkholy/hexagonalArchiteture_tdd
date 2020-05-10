@@ -1,0 +1,3 @@
+INSERT INTO public.user
+(id,first_name,last_name)
+VALUES('9eb8e365-3d7e-4994-960d-e51275343f23','farouk','elkholy');
