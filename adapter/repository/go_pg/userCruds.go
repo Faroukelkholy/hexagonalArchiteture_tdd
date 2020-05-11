@@ -29,13 +29,14 @@ func (thisCS *UserCruds) CreateUser(user *model.User) error {
 
 	} else {
 		fmt.Println("did nothing")
-		return errors.New("There a user  already")
+		return errors.New("user already exists")
 	}
 }
 
 
 
 func (thisCS *UserCruds) GetUser(id string) (*model.User, error) {
+	fmt.Printf("Repo GetUser %s\n", id)
 	enitiyQueried := &entity.User{}
 
 	err := thisCS.Database.

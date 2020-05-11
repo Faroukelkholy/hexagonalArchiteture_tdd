@@ -9,7 +9,10 @@ import (
 	"sync"
 )
 
-var once sync.Once
+var (
+	once sync.Once
+	c    echo.Context
+)
 
 type RestEchoImpl struct {
 	router *echo.Echo
@@ -18,17 +21,12 @@ type RestEchoImpl struct {
 func (thisREcho *RestEchoImpl) InitAdapter() {
 	log.Println("RestGinImpl")
 	thisREcho.router = echo.New()
-	//thisREcho.router.Use(middleware.CORS())
-	////thisREcho.router.Use(middleware.CSRF())
-	//thisREcho.router.Use(middleware.Logger())
-	//thisREcho.router.Use(middleware.Gzip())
-	//thisREcho.router.Use(middleware.Secure())
 }
 
 func (thisREcho *RestEchoImpl) Start(port int) error {
 	pingController := controllers.NewPingController(thisREcho.router)
 	pingController.Control()
 	userController := controllers.NewUserController(thisREcho.router, domain.UserUseCase)
-	userController.Control()
+	userController.Control(c)
 	return thisREcho.router.Start(fmt.Sprintf(":%d", port))
 }

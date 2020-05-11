@@ -8,27 +8,23 @@ import (
 )
 
 type GetUserUseCase struct {
-	repository     output.IDatabasePort
+	repository     output.IUserCrudsPort
 }
 
-func NewGetUserUseCase (repository output.IDatabasePort) userPort.IGetUser {
+func NewGetUserUseCase (repository output.IUserCrudsPort) userPort.IGetUser {
 	return &GetUserUseCase{
 		repository,
 	}
-
 }
 
 func (thisUser *GetUserUseCase) GetUser(id string) (*model.User, error) {
 	fmt.Printf("Use Case proccessing GetUser %s\n", id)
-	// query db
-	//TODO: database impl
 	result, err :=thisUser.repository.GetUser(id)
-	//result, err := thisUser.repository.GetBilling(id, accountId)
 	if err != nil {
-		fmt.Printf("Use Case proccessing GetBillingById err %v\n", err)
+		fmt.Printf("Use Case proccessing GetUser err %v\n", err)
 		return nil, err
 	}
-	fmt.Printf("Use Case proccessing GetBillingById result %v\n", result)
+	fmt.Printf("Use Case proccessing user result %v\n", result)
 	return result, nil
 }
 

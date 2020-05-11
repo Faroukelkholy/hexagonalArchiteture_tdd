@@ -10,6 +10,7 @@ var UserUseCase userPort.IUserDomainServicePort
 
 type userUseCase struct {
 	userPort.IGetUser
+	userPort.ICreateUser
 }
 
 type DomainServiceImpl struct {
@@ -27,5 +28,6 @@ func NewDomainServiceImpl(repository output.IDatabasePort) *DomainServiceImpl {
 func (thisDS *DomainServiceImpl) initUseCases() {
 	UserUseCase = &userUseCase{
 		user.NewGetUserUseCase(thisDS.databasePort),
+		user.NewCreateUserUseCase(thisDS.databasePort),
 	}
 }

@@ -1,6 +1,7 @@
 package go_pg
 
 import (
+	"context"
 	"fmt"
 	"github.com/go-pg/pg/v9"
 	"hexagonalArchiteture_tdd/port/output"
@@ -23,21 +24,21 @@ func (thisDBgoPg *DatabaseGoPgImpl) InitAdapter() {
 		Database: config.DB_NAME,
 	})
 	// This logs the go_pg query on the database.
-	//if config.DEBUG == "*" || config.DEBUG == "database" {
-	//	thisDBgoPg.pgConnection.AddQueryHook(dbLogger{})
-	//}
+	if config.DEBUG == "*" || config.DEBUG == "database" {
+		thisDBgoPg.pgConnection.AddQueryHook(dbLogger{})
+	}
 	thisDBgoPg.IUserCrudsPort = &UserCruds{Database: thisDBgoPg.pgConnection}
 
 }
 
-//type dbLogger struct{}
-//
-//func (d dbLogger) BeforeQuery(c context.Context, q *pg.QueryEvent) (context.Context, error) {
-//	fmt.Println(q.FormattedQuery())
-//	return c, nil
-//}
-//func (d dbLogger) AfterQuery(c context.Context, q *pg.QueryEvent) error {
-//	fmt.Println(c)
-//	fmt.Println(q.FormattedQuery())
-//	return nil
-//}
+type dbLogger struct{}
+
+func (d dbLogger) BeforeQuery(c context.Context, q *pg.QueryEvent) (context.Context, error) {
+	fmt.Println(q.FormattedQuery())
+	return c, nil
+}
+func (d dbLogger) AfterQuery(c context.Context, q *pg.QueryEvent) error {
+	fmt.Println(c)
+	fmt.Println(q.FormattedQuery())
+	return nil
+}
