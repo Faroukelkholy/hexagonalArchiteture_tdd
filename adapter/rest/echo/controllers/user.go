@@ -31,6 +31,9 @@ func (thisUC *UserController) getUser(c echo.Context) error {
 	result, err := thisUC.userDomainInputPort.GetUser(userId)
 	if err != nil {
 		fmt.Println("getuser UseCase", err)
+		if err.Error() == "user do not exist" {
+			return c.JSON(http.StatusNotFound, err.Error())
+		}
 		//restErr := errors.BadRequest("invalid json body")
 		return c.JSON(http.StatusInternalServerError, err)
 	}
@@ -41,7 +44,7 @@ func (thisUC *UserController) createUser(c echo.Context) error {
 	fmt.Printf("createUser controller \n")
 	var user model.User
 	if err := c.Bind(&user); err != nil {
-		fmt.Println("error unmarshiling :",err)
+		fmt.Println("error unmarshiling :", err)
 		return c.JSON(http.StatusBadRequest, err)
 	}
 

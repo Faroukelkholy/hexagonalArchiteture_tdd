@@ -44,9 +44,9 @@ func (thisCS *UserCruds) GetUser(id string) (*model.User, error) {
 		Where("id=? ", id).
 		First()
 	if err != nil {
-		fmt.Printf("error UpdateUser billing %v\n", err)
+		fmt.Printf("error GetUser billing %v\n", err)
 		if err.Error() == "pg: no rows in result set" {
-			return nil, err
+			return nil,  errors.New("user do not exist")
 		}
 		return nil, err
 	}

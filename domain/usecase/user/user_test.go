@@ -9,22 +9,6 @@ import (
 	"testing"
 )
 
-//var (
-//	createUserRepoMockfunc func(user *model.User) error
-//	getUserRepoMockfunc    func(Id string) (*model.User, error)
-//)
-//
-//
-//type userCrudsRepoMock struct {
-//}
-//
-//func (*userCrudsRepoMock) CreateUser(user *model.User) error {
-//	return createUserRepoMockfunc(user)
-//}
-//
-//func (*userCrudsRepoMock) GetUser(id string) (*model.User, error) {
-//	return getUserRepoMockfunc(id)
-//}
 
 func TestCreateUserSuccess(t *testing.T) {
 	userId := "d864c9cd-f0ef-46c2-8959-f6b7dc02aa46"
@@ -41,6 +25,24 @@ func TestCreateUserSuccess(t *testing.T) {
 	})
 	log.Println("err in  TestCreateUserSuccess :", err)
 	assert.Nil(t, err)
+}
+
+func TestCreateUserError(t *testing.T) {
+	userId := "d864c9cd-f0ef-46c2-8959-f6b7dc02aa46"
+
+	createUserRepoMockfunc := func(user *model.User) error {
+		return errors.New("user already exists")
+	}
+	userRepoMock := &repositoryMock.UserCrudsRepoMock{createUserRepoMockfunc, nil}
+	getUserUseCase := NewCreateUserUseCase(userRepoMock)
+	err := getUserUseCase.CreateUser(&model.User{
+		Id:        userId,
+		FirstName: "Farouk",
+		LastName:  "Elkholy",
+	})
+	log.Println("err in  TestCreateUserError :", err)
+	assert.NotNil(t, err)
+	assert.EqualValues(t, "user already exists", err.Error())
 }
 
 func TestGetUserNotExist(t *testing.T) {
